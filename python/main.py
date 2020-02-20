@@ -40,7 +40,7 @@ def write_file(filename, scanned_libraries):
     with open(filename, 'w') as fh:
         fh.write('{}\n'.format(len(scanned_libraries)))
         for id, books in scanned_libraries.items():
-            fh.write("{} {}".format(id, len(books)))
+            fh.write("{} {}\n".format(id, len(books)))
             fh.write(' '.join(map(str, books)) + '\n')
 
 
