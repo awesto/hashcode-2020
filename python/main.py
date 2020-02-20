@@ -5,11 +5,11 @@ Library = namedtuple('Library', ['id', 'signup', 'bpd', 'books'])
 
 
 def parse_input_file(input_file):
-    global num_libraries, num_books
+    global libraries, total_num_days
 
-    libraries = []
     with open(input_file, 'r') as fh:
         line = fh.readline().rstrip('\n').split(' ')
+        libraries = []
         num_books = int(line[0])
         num_libraries = int(line[1])
         total_num_days = int(line[2])
@@ -28,9 +28,9 @@ def parse_input_file(input_file):
 
 def write_file(filename):
     with open(filename, 'w') as fh:
-        fh.write('{}\n'.format(len(permutation)))
-        for slide in permutation:
-            fh.write(slide.id + '\n')
+        fh.write('{}\n'.format(len(libraries)))
+        for lib in libraries:
+            fh.write('{}\n'.format(lib.id))
 
 
 if __name__ == '__main__':
@@ -38,5 +38,5 @@ if __name__ == '__main__':
     if len(sys.argv) < 3:
         print ("usage: ./main.py IN_FILE OUT_FILE")
         sys.exit(1)
-    total_num_days, libraries = parse_input_file(sys.argv[1])
+    parse_input_file(sys.argv[1])
     write_file(sys.argv[2])
