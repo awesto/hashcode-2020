@@ -1,5 +1,7 @@
 from collections import namedtuple
 import sys
+import mlrose
+import numpy
 
 Library = namedtuple('Library', ['id', 'signup', 'bpd', 'books', 'score', 'potential'])
 
@@ -34,6 +36,26 @@ def parse_input_file(input_file):
             signup = int(line1[1])
             potential = score * bpd / signup
             libraries.append(Library(id, signup, bpd, books, score, potential))
+
+        dist_graph = []
+        for lib1 in libraries:
+          for lib2 in libraries:
+            if lib1 is not lib2:
+              dist_graph.append([lib1.id, lib2.id, lib2.potential])
+
+        fitness_dists = mlrose.TravellingSales(distances = dist_graph)
+
+        problem_fit = mlrose.TSPOpt(len(libraries), fitness_fn = fitness_dists, maximize=False)
+
+        best_state, best_fitness = mlrose.genetic_alg(problem_fit, random_state = 2)
+
+        print(best_state)
+
+        for k, libid in enumerate(best_state):
+          for lib in libraries:
+              if lib.id == id and k < len(best_state) - 1:
+                  print(lib.bpd * best_state[k])
+                  break
 
 
 def write_file(filename, scanned_libraries):
@@ -75,4 +97,4 @@ if __name__ == '__main__':
     parse_input_file(sys.argv[1])
     libraries.sort(key=lambda l: l.potential)
     scanned_libraries = optimize()
-    write_file(sys.argv[2], scanned_libraries)
+    #write_file(sys.argv[2], scanned_libraries)
