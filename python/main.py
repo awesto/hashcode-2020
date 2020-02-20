@@ -2,7 +2,12 @@ from collections import namedtuple
 import sys
 
 Library = namedtuple('Library', ['id', 'signup', 'bpd', 'books'])
-
+"""
+id: of Library
+signup: days for signup
+bpd: books which can be scanned per day
+books: a dictionary of books, key: score
+"""
 
 def parse_input_file(input_file):
     global libraries, total_num_days
@@ -20,10 +25,9 @@ def parse_input_file(input_file):
             line1 = fh.readline().rstrip('\n').split(' ')
             line2 = fh.readline().rstrip('\n').split(' ')
             books = [int(s) for s in line2]
-            books = [book_score[b] for b in books]
+            books = {b: book_score[b] for b in books}
             assert len(books) == int(line1[0])
             libraries.append(Library(id, int(line1[1]), int(line1[2]), books))
-    return total_num_days, libraries
 
 
 def write_file(filename):
