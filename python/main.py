@@ -41,7 +41,18 @@ def write_file(filename, scanned_libraries):
         fh.write('{}\n'.format(len(scanned_libraries)))
         for id, books in scanned_libraries.items():
             fh.write("{} {}\n".format(id, len(books)))
-            fh.write(' '.join(map(str, books)) + '\n')
+            # TODO check libraries with 0 books
+            if (len(books) is not 0):
+                fh.write(' '.join(map(str, books)) + '\n')
+
+
+def write_file(filename):
+    with open(filename, 'w') as fh:
+        fh.write('{}\n'.format(len(libraries)))
+        for lib in libraries:
+            fh.write(str(lib.id) + ' ')
+            fh.write(str(len(lib.books)) + '\n')
+            fh.write(' '.join(map(str, lib.books)) + '\n')
 
 
 def optimize():
@@ -73,6 +84,6 @@ if __name__ == '__main__':
         print("usage: ./main.py IN_FILE OUT_FILE")
         sys.exit(1)
     parse_input_file(sys.argv[1])
-    libraries.sort(key=lambda l: l.potential)
-    scanned_libraries = optimize()
-    write_file(sys.argv[2], scanned_libraries)
+    libraries.sort(key=lambda l: l.signup)
+    #scanned_libraries = optimize()
+    write_file(sys.argv[2])
