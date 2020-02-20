@@ -1,7 +1,7 @@
 from collections import namedtuple
 import sys
 
-Library = namedtuple('Library', ['id', 'signup', 'bpd', 'books'])
+Library = namedtuple('Library', ['id', 'signup', 'bpd', 'books', 'score'])
 """
 id: of Library
 signup: days for signup
@@ -27,7 +27,8 @@ def parse_input_file(input_file):
             books = [int(s) for s in line2]
             books = {b: book_score[b] for b in books}
             assert len(books) == int(line1[0])
-            libraries.append(Library(id, int(line1[1]), int(line1[2]), books))
+            score = sum(books.values())
+            libraries.append(Library(id, int(line1[1]), int(line1[2]), books, score))
 
 
 def write_file(filename):
