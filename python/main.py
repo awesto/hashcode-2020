@@ -49,7 +49,7 @@ def optimize():
     total_score = 0
     scanned_books = set()
     scanned_libraries = {}
-    for num, lib in enumerate(libraries):
+    for lib in libraries:
         elapsed_days += lib.signup
         if elapsed_days > total_num_days:
             break
