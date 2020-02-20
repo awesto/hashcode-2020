@@ -1,9 +1,9 @@
 from collections import namedtuple
 import sys
 
-Library = namedtuple('Library', ['id', 'signup', 'bpd', 'books', 'score'])
+Library = namedtuple('Library', ['id', 'signup', 'bpd', 'books', 'score', 'scanned_books'])
 
-sample_libraries = [Library(0, 2, 2, [0, 1, 2, 3, 4], 777), Library(1, 3, 1, [3, 2, 5, 0], 999)]
+sample_libraries = [Library(0, 2, 2, [0, 1, 2, 3, 4], 777, {}), Library(1, 3, 1, [3, 2, 5, 0], 999, {})]
 """
 id: of Library
 signup: days for signup
@@ -30,7 +30,7 @@ def parse_input_file(input_file):
             books = {b: book_score[b] for b in books}
             assert len(books) == int(line1[0])
             score = sum(books.values())
-            libraries.append(Library(id, int(line1[1]), int(line1[2]), books, score))
+            libraries.append(Library(id, int(line1[1]), int(line1[2]), books, score, set()))
 
 
 def write_file(filename):
@@ -42,10 +42,31 @@ def write_file(filename):
             fh.write(' '.join(map(str, lib.books)) + '\n')
 
 
+def score_up():
+    elapsed_days = 0
+    total_score = 0
+    scanned_books = set()
+    for num, lib in enumerate(libraries):
+        elapsed_days += lib.signup
+        if elapsed_days > total_num_days:
+            break
+        num_scanned = 0
+        for k, s in lib.books.items():
+            if elapsed_days + num_scanned / lib.bpd > total_num_days:
+                break
+            if k not in scanned_books:
+                scanned_books.add(k)
+                lib.scanned_books.add(k)
+                total_score += s
+                num_scanned +=1
+    print("Total score: {}".format(total_score))
+
+
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         print("usage: ./main.py IN_FILE OUT_FILE")
         sys.exit(1)
     parse_input_file(sys.argv[1])
-    libraries.sort(key=lambda l: l.signup)
+    libraries.sort(key=lambda l: l.score * l.bpd / l.signup)
+    score_up()
     write_file(sys.argv[2])
