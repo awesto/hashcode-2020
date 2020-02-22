@@ -32,7 +32,8 @@ def parse_input_file(input_file):
             score = sum(books.values())
             bpd = int(line1[2])
             signup = int(line1[1])
-            potential = score * bpd / signup
+            #potential = score * bpd / signup
+            potential = (total_num_days - signup) * score / bpd
             libraries.append(Library(id, signup, bpd, books, score, potential))
 
 
@@ -84,6 +85,8 @@ if __name__ == '__main__':
         print("usage: ./main.py IN_FILE OUT_FILE")
         sys.exit(1)
     parse_input_file(sys.argv[1])
-    libraries.sort(key=lambda l: l.signup)
+    #libraries.sort(key=lambda l: l.signup)
+
+    libraries.sort(key=lambda l: l.potential, reverse=True)
     #scanned_libraries = optimize()
     write_file(sys.argv[2])
